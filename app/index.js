@@ -1,6 +1,8 @@
 'use strict';
 var chalk = require('chalk'),
 	yeoman = require('yeoman-generator');
+var _ = require('underscore');
+var slugify = require("underscore.string/slugify");
 
 var ReactSDPGenerator = yeoman.generators.Base.extend({
 
@@ -28,14 +30,15 @@ var ReactSDPGenerator = yeoman.generators.Base.extend({
 			name: 'componentName',
 			message: 'What is the name of the component?',
 			store: true,
-			default: 'NewComponent'
+			default: 'NewComponent',
+			createDirectory: true
 		}
 		];
 
 		this.prompt(prompts, function (props) {
 			this.log('\n');
-			this._.extend(this, props);
-			this.componentKey = this._.slugify(this.componentName).toLowerCase();
+			_.extend(this, props);
+			this.componentKey = slugify(this.componentName).toLowerCase();
 			if (props.createDirectory) {
 				this.destinationRoot(this.componentKey);
 			}
@@ -44,18 +47,18 @@ var ReactSDPGenerator = yeoman.generators.Base.extend({
 	},
 
 	writing: {
-		project: function () {
-			this.template('client/base/_package.json', 'package.json');
-			this.template('client/base/_config.js', 'config.js');
-			this.template('client/base/.gitignore', '.gitignore');
-			this.directory('client/base/_git', '.git');
-		},
-
 		clientfiles: function() {
-			this.template('client/base/css/_style.scss', 'lib/css/_style.scss');
-			this.template('client/base/lib/_main.js', 'lib/main.js');
-			this.template('client/base/__tests__/_test.js', '__tests__/'+this.componentKey+'-test.js');
-			this.template('client/_index.js', 'index.js');
+			this.template('client/base/_package.json', 'package.json');
+			this.template('client/base/_config.rb', 'config.rb');
+			this.template('client/base/index.html', 'index.html');
+			this.template('client/base/css/_style.scss', this.componentKey + '/lib/css/style.scss');
+			this.template('client/base/__tests__/_test.js', this.componentKey + '/lib/views/__test__/'+this.componentKey+'-test.js');
+			this.template('client/base/actions/_actions.js', this.componentKey + '/lib/actions/actions.js');
+			this.template('client/base/router/_routes.jsx', this.componentKey + '/lib/router/routes.jsx');
+			this.template('client/base/stores/_store.js', this.componentKey + '/lib/stores/store.js');
+			this.template('client/base/views/_app.jsx', this.componentKey + '/lib/views/app.jsx');
+			this.template('client/_main.js', this.componentKey + '/lib/main.js');
+			this.template('client/_alt-application.js', this.componentKey + '/lib/alt-application.js');
 		}
 	},
 
@@ -64,14 +67,7 @@ var ReactSDPGenerator = yeoman.generators.Base.extend({
 	},
 
 	end: function() {
-		/*
-		this.spawnCommand('jspm', ['install']);
-		if(this.repoType == 'stash'){
-			this.spawnCommand('jspm', ['registry create stash jspm-git']);
-			this.spawnCommand('jspm', ['registry config stash']);
-			this.spawnCommand('jspm', ['install stash:' + this.projectName +'/' + this.componentKey]);
-		}
-		*/
+
 		var chdir = this.createDirectory ? '"cd ' + this.componentKey + '" then ' : '';
 		this.log(
 			'\n' + chalk.green.underline('Your new React Component is ready!')

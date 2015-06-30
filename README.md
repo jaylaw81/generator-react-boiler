@@ -1,21 +1,21 @@
-# generator-react-jspmio
+# generator-react-boiler
 
-> [Yeoman](http://yeoman.io) generator for [React](http://facebook.github.io/react/) and [JSPM](http://jspm.io/)
+> [Yeoman](http://yeoman.io) generator for [React](http://facebook.github.io/react/)
 
-Simple component generator for ReactJS + JSPM + JEST.
+Simple component generator for ReactJS + Flux + Alt + JEST.
 
 ## Getting Started
 
 Install the generator:
 
 ```bash
-npm install -g generator-react-jspmio
+npm install -g generator-react-boiler
 ```
 
 Then run the generator:
 
 ```bash
-yo react-jspmio
+yo react-boiler
 ```
 
 ## Running a JEST test
