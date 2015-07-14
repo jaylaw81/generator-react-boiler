@@ -32,6 +32,13 @@ var ReactSDPGenerator = yeoman.generators.Base.extend({
 			store: true,
 			default: 'NewComponent',
 			createDirectory: true
+		},
+		{
+			type: 'input',
+			name: 'componentVersion',
+			message: 'What version is this component',
+			store: true,
+			default: '0.0.1'
 		}
 		];
 
